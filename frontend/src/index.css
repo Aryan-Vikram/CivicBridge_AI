@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-slate-900 font-body antialiased;
+  -webkit-font-smoothing: antialiased;
+}
+
+html.dark body {
+  @apply bg-navy-900 text-slate-100;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+::selection {
+  background: #2451FF;
+  color: white;
+}
+
+.focus-ring {
+  @apply outline-none ring-2 ring-royal-500 ring-offset-2 ring-offset-white dark:ring-offset-navy-900;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 8px; }
+html.dark ::-webkit-scrollbar-thumb { background: #223258; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.leaflet-container {
+  font-family: Inter, sans-serif;
+  background: #EEF2FF;
+}
+html.dark .leaflet-container {
+  background: #0B1220;
+}
