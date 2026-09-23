@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Menu, X, Moon, Sun, Bell, ChevronDown } from "lucide-react";
+import { Menu, X, Moon, Sun, Bell, ChevronDown, LogOut, LayoutDashboard, FilePlus2 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { Logo } from "./Logo";
@@ -24,9 +24,29 @@ const dashboardPath: Record<string, string> = {
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const { user, logout } = useAuth();
   const { dark, toggle } = useTheme();
   const navigate = useNavigate();
+
+  // close the account dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    setMenuOpen(false);
+    setOpen(false);
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 backdrop-blur dark:border-white/10 dark:bg-navy-900/85">
@@ -66,30 +86,52 @@ export function Navbar() {
                 <Bell size={17} />
                 <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-royal-600" />
               </Link>
-              <div className="group relative">
-                <button className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-2 hover:bg-slate-100 dark:hover:bg-white/5">
+
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setMenuOpen((o) => !o)}
+                  className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-2 hover:bg-slate-100 dark:hover:bg-white/5"
+                  aria-expanded={menuOpen}
+                  aria-haspopup="true"
+                >
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-royal-600 text-xs font-semibold text-white">
                     {user.avatarInitials}
                   </span>
-                  <ChevronDown size={14} className="text-slate-400" />
+                  <ChevronDown size={14} className={"text-slate-400 transition-transform " + (menuOpen ? "rotate-180" : "")} />
                 </button>
-                <div className="invisible absolute right-0 mt-1 w-48 rounded-xl border border-slate-200 bg-white p-1.5 opacity-0 shadow-card transition group-hover:visible group-hover:opacity-100 dark:border-white/10 dark:bg-navy-800">
-                  <Link to={dashboardPath[user.role]} className="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-white/5">
-                    Dashboard
-                  </Link>
-                  <Link to="/report" className="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-white/5">
-                    Report a problem
-                  </Link>
-                  <button
-                    onClick={() => {
-                      logout();
-                      navigate("/");
-                    }}
-                    className="block w-full rounded-lg px-3 py-2 text-left text-sm text-crimson-600 hover:bg-crimson-50 dark:hover:bg-crimson-500/10"
-                  >
-                    Sign out
-                  </button>
-                </div>
+
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-1.5 shadow-card dark:border-white/10 dark:bg-navy-800">
+                    <div className="border-b border-slate-100 px-3 py-2.5 dark:border-white/10">
+                      <div className="text-sm font-medium text-slate-800 dark:text-slate-100">{user.name}</div>
+                      <div className="truncate text-xs text-slate-400 dark:text-slate-500">{user.email}</div>
+                      <div className="mt-1 inline-block rounded-full bg-royal-50 px-2 py-0.5 text-[10px] font-medium capitalize text-royal-700 dark:bg-royal-500/10 dark:text-royal-400">
+                        {user.role}
+                      </div>
+                    </div>
+                    <Link
+                      to={dashboardPath[user.role]}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-white/5"
+                    >
+                      <LayoutDashboard size={15} /> Dashboard
+                    </Link>
+                    <Link
+                      to="/report"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-white/5"
+                    >
+                      <FilePlus2 size={15} /> Report a problem
+                    </Link>
+                    <div className="my-1 h-px bg-slate-100 dark:bg-white/10" />
+                    <button
+                      onClick={handleLogout}
+                      className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium text-crimson-600 hover:bg-crimson-50 dark:hover:bg-crimson-500/10"
+                    >
+                      <LogOut size={15} /> Log out
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
@@ -114,6 +156,18 @@ export function Navbar() {
 
       {open && (
         <div className="border-t border-slate-200 bg-white px-4 py-4 dark:border-white/10 dark:bg-navy-900 lg:hidden">
+          {user && (
+            <div className="mb-3 flex items-center gap-3 rounded-lg bg-slate-50 px-3 py-2.5 dark:bg-white/5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-royal-600 text-sm font-semibold text-white">
+                {user.avatarInitials}
+              </span>
+              <div>
+                <div className="text-sm font-medium text-slate-800 dark:text-slate-100">{user.name}</div>
+                <div className="text-xs capitalize text-slate-400 dark:text-slate-500">{user.role}</div>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col gap-1">
             {links.map((l) => (
               <NavLink
@@ -126,10 +180,23 @@ export function Navbar() {
               </NavLink>
             ))}
             <div className="my-2 h-px bg-slate-100 dark:bg-white/10" />
+
             {user ? (
-              <Link to={dashboardPath[user.role]} onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium text-royal-600">
-                Go to dashboard
-              </Link>
+              <>
+                <Link
+                  to={dashboardPath[user.role]}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-royal-600"
+                >
+                  <LayoutDashboard size={16} /> Go to dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-crimson-600"
+                >
+                  <LogOut size={16} /> Log out
+                </button>
+              </>
             ) : (
               <>
                 <Link to="/login" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200">

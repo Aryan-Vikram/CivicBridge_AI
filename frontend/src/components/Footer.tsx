@@ -12,7 +12,6 @@ export function Footer() {
               <span className="font-display text-sm font-bold text-slate-900 dark:text-white">CivicBridge AI</span>
             </div>
             <p className="mt-3 max-w-xs text-sm text-slate-500 dark:text-slate-400">From public problems to real solutions.</p>
-            <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">SIH26043 · Software Track · Prototype demonstration</p>
           </div>
           <div>
             <h4 className="font-display text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Platform</h4>
@@ -34,8 +33,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-100 pt-6 text-xs text-slate-400 dark:border-white/10 dark:text-slate-500 sm:flex-row">
-          <span>© {new Date().getFullYear()} CivicBridge AI. Prototype for demonstration purposes.</span>
-          <span>Built for Smart India Hackathon</span>
+          <span>© {new Date().getFullYear()} CivicBridge AI. All rights reserved.</span>
         </div>
       </div>
     </footer>

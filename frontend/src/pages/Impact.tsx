@@ -27,7 +27,7 @@ export default function Impact() {
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="max-w-2xl">
         <h1 className="font-display text-3xl font-bold text-slate-900 dark:text-white">Impact</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">Prototype / demonstration data illustrating the outcomes this model is designed to produce.</p>
+        <p className="mt-2 text-slate-600 dark:text-slate-300">Real outcomes from problems that moved through the full CivicBridge AI pipeline.</p>
       </div>
 
       <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">

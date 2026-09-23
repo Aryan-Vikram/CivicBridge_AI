@@ -4,6 +4,7 @@ import { ArrowRight, ArrowDown, Sparkles, ShieldCheck, GraduationCap, Factory, L
 import { WorkflowPipeline } from "../components/WorkflowPipeline";
 import { StatCard } from "../components/StatCard";
 import { MapPanel } from "../components/MapPanel";
+import { SceneSlideshow } from "../components/SceneSlideshow";
 import { challenges } from "../data/challenges";
 import { universities } from "../data/universities";
 
@@ -16,11 +17,11 @@ const trust = [
 ];
 
 const caseStudy = [
-  { label: "Before", text: "Unsafe drinking water in Barwadih village well" },
-  { label: "Research", text: "BIT Mesra's environmental engineering team investigates" },
-  { label: "Solution", text: "Low-cost multi-stage filtration prototype" },
-  { label: "Pilot", text: "Deployed and tested with 50 households" },
-  { label: "Impact", text: "850 citizens gain access to safe drinking water" },
+  { label: "Before", text: "Unsafe village drinking water" },
+  { label: "Research", text: "University environmental engineering team" },
+  { label: "Solution", text: "Low-cost filtration prototype" },
+  { label: "Pilot", text: "50 households" },
+  { label: "After", text: "Safe drinking water access" },
 ];
 
 export default function Home() {
@@ -28,45 +29,53 @@ export default function Home() {
 
   return (
     <div>
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-slate-100 dark:border-white/10">
-        <div className="absolute inset-0 bg-gradient-to-b from-royal-50/60 via-white to-white dark:from-royal-500/[0.06] dark:via-navy-900 dark:to-navy-900" />
-        <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pt-24 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-royal-200 bg-white px-3 py-1 text-xs font-medium text-royal-700 dark:border-royal-500/30 dark:bg-navy-800 dark:text-royal-400">
-              SIH26043 · Prototype demonstration
-            </span>
-            <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight text-slate-900 dark:text-white sm:text-6xl">
+      {/* HERO — cinematic auto-changing backdrop */}
+      <section className="relative isolate overflow-hidden">
+        <SceneSlideshow />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-20 sm:px-6 sm:pt-28 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="mx-auto max-w-3xl text-center"
+          >
+            <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-white drop-shadow-sm sm:text-6xl">
               From public problems<br />to real solutions.
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base text-slate-600 dark:text-slate-300 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-xl text-base text-white/85 sm:text-lg">
               CivicBridge AI connects citizens, universities, government and industry to transform real societal
               challenges into measurable solutions.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 to="/report"
-                className="flex items-center gap-2 rounded-xl bg-royal-600 px-6 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:bg-royal-700"
+                className="flex items-center gap-2 rounded-xl bg-royal-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-royal-600/30 transition hover:-translate-y-0.5 hover:bg-royal-500 hover:shadow-xl"
               >
                 Report a problem <ArrowRight size={16} />
               </Link>
               <Link
                 to="/explore"
-                className="rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 dark:border-white/15 dark:bg-transparent dark:text-slate-200"
+                className="rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
               >
                 Explore challenges
               </Link>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="mx-auto mt-16 max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mx-auto mt-16 max-w-5xl rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md sm:p-8"
+          >
             <WorkflowPipeline />
-          </div>
+          </motion.div>
 
-          <div className="mx-auto mt-14 flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-3">
             {trust.map((t) => (
-              <div key={t.label} className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                <t.icon size={15} className="text-royal-500" />
+              <div key={t.label} className="flex items-center gap-2 text-sm text-white/80">
+                <t.icon size={15} className="text-white" />
                 {t.label}
               </div>
             ))}
@@ -113,7 +122,6 @@ export default function Home() {
       <section className="border-y border-slate-100 bg-slate-50/60 py-16 dark:border-white/10 dark:bg-white/[0.02]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white">Live platform metrics</h2>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Prototype / demonstration data</p>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <StatCard label="Problems submitted" value={2458} />
             <StatCard label="Active challenges" value={612} accent="indigo" />
@@ -128,10 +136,7 @@ export default function Home() {
       {/* LIVE MAP PREVIEW */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white">Challenges across Jharkhand</h2>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Prototype / demonstration data</p>
-          </div>
+          <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white">Challenges across Jharkhand</h2>
           <Link to="/explore" className="flex items-center gap-1.5 text-sm font-semibold text-royal-600 hover:underline">
             View all challenges <ArrowRight size={14} />
           </Link>
